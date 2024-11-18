@@ -1,126 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Job Role Prediction</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        margin: 0;
-        padding: 20px;
-        background-color: #f0f0f0;
-      }
-      .container {
-        max-width: 500px;
-        width: 100%;
-        background-color: #ffffff;
-        padding: 20px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-      }
-      h2 {
-        color: #333;
-        text-align: center;
-        margin-top: 0;
-      }
-      label {
-        display: block;
-        margin-top: 10px;
-        color: #555;
-      }
-      input,
-      textarea {
-        width: 100%;
-        padding: 10px;
-        margin-top: 5px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 14px;
-      }
-      button {
-        background-color: #007bff;
-        color: #fff;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-        transition: background-color 0.3s ease;
-      }
-      button:hover {
-        background-color: #0056b3;
-      }
-      .buttons {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 20px;
-      }
-      .home-button {
-        display: block;
-        text-align: center;
-        background-color: #6c757d;
-        color: #fff;
-        padding: 10px;
-        font-size: 14px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        text-decoration: none;
-        margin-top: 20px;
-      }
-      .home-button:hover {
-        background-color: #5a6268;
-      }
-      #result {
-        margin-top: 15px;
-        font-weight: bold;
-        color: #007bff;
-        text-align: center;
-      }
-    </style>
-  </head>
-  <body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Search - Placement Diaries</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <ul class="nav-links">
+            <li><a href="/home" class="nav-animation">Home</a></li>
+            <li><a href="/share" class="nav-animation">Share Journey</a></li>
+            <li><a href="/upload_skills" class="nav-animation">Upload Skills</a></li>
+            <li><a href="/view_others" class="nav-animation">View Journeys</a></li>
+            <li><a href="/logout" class="nav-animation">Logout</a></li>
+        </ul>
+    </nav>
     <div class="container">
-      <h2>Predict Job Role</h2>
-      <form id="predictForm" onsubmit="predictJobRole(event)">
-        <label for="Skills">Enter Your Skills:</label>
-        <textarea id="Skills" name="Skills" rows="4" required></textarea>
-
-        <div class="buttons">
-          <button type="submit">Predict Job Role</button>
-          <button type="button" id="predict-company-btn" onclick="predictCompany()" disabled>Predict Company</button>
+        <div class="card">
+            <h1>Search for Job Listings</h1>
+            <input type="text" id="job-role" placeholder="Enter job role (e.g., Software Developer)">
+            <button class="btn" onclick="searchJobs()">Search Jobs</button>
+            <div id="job-listings"></div>
         </div>
-
-        <a href="/home" class="home-button">Home</a>
-      </form>
-      <div id="result"></div>
     </div>
-
     <script>
       const predictCompanyButton = document.getElementById("predict-company-btn");
-
+    
       // Function to predict Job Role with validation
       async function predictJobRole(event) {
         event.preventDefault();
         const skills = document.getElementById("Skills").value.trim();
-
+    
         if (!skills) {
           alert("Please enter your skills before predicting the job role.");
           return;
         }
-
+    
         const formData = new FormData(document.getElementById("predictForm"));
         const response = await fetch("/predict", {
           method: "POST",
           body: formData,
         });
         const data = await response.json();
-
+    
         if (data.prediction && data.prediction !== "No match") {
           document.getElementById("result").textContent = "Predicted Job Role: " + data.prediction;
           predictCompanyButton.disabled = false; // Enable the Predict Company button
@@ -129,7 +52,7 @@
           predictCompanyButton.disabled = true; // Keep Predict Company button disabled
         }
       }
-
+    
       // Function to predict Company with validation
       function predictCompany() {
         if (!predictCompanyButton.disabled) {
@@ -139,5 +62,6 @@
         }
       }
     </script>
-  </body>
+</body>
 </html>
+

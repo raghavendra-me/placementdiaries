@@ -1,101 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Job Search - Adzuna API</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        margin: 0;
-        padding: 20px;
-        background-color: #f0f0f0;
-      }
-      .container {
-        max-width: 600px;
-        width: 100%;
-        background-color: #ffffff;
-        padding: 20px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-      }
-      h1 {
-        color: #333;
-        text-align: center;
-        margin-top: 0;
-      }
-      input[type="text"] {
-        width: calc(100% - 22px);
-        padding: 10px;
-        margin-top: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 16px;
-      }
-      .search-button {
-        background-color: #007bff;
-        color: #fff;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-        transition: background-color 0.3s ease;
-        display: block;
-        width: 100%;
-        margin-top: 15px;
-        text-align: center;
-      }
-      .search-button:hover {
-        background-color: #0056b3;
-      }
-      #job-listings {
-        margin-top: 20px;
-      }
-      .job-item {
-        border: 1px solid #ddd;
-        padding: 15px;
-        border-radius: 5px;
-        margin-bottom: 15px;
-      }
-      .home-button {
-        display: block;
-        text-align: center;
-        background-color: #6c757d;
-        color: #fff;
-        padding: 10px;
-        font-size: 14px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        text-decoration: none;
-        margin-top: 20px;
-      }
-      .home-button:hover {
-        background-color: #5a6268;
-      }
-    </style>
-  </head>
-  <body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Role Prediction - Placement Diaries</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <ul class="nav-links">
+            <li><a href="/home" class="nav-animation">Home</a></li>
+            <li><a href="/share" class="nav-animation">Share Journey</a></li>
+            <li><a href="/upload_skills" class="nav-animation">Upload Skills</a></li>
+            <li><a href="/view_others" class="nav-animation">View Journeys</a></li>
+            <li><a href="/logout" class="nav-animation">Logout</a></li>
+        </ul>
+    </nav>
     <div class="container">
-      <h1>Search for Job Listings</h1>
-      <input
-        type="text"
-        id="job-role"
-        placeholder="Enter job role (e.g., Software Developer)"
-      />
-      <button class="search-button" onclick="searchJobs()">Search Jobs</button>
-
-      <a href="/home" class="home-button">Home</a>
-
-      <div id="job-listings"></div>
+        <div class="card">
+            <h2>Predict Job Role</h2>
+            <form id="predictForm" onsubmit="predictJobRole(event)">
+                <label for="Skills">Enter Your Skills:</label>
+                <textarea id="Skills" name="Skills" rows="4" required></textarea>
+                <div class="buttons">
+                    <button type="submit" class="btn">Predict Job Role</button>
+                    <button type="button" id="predict-company-btn" class="btn" onclick="predictCompany()" disabled>Predict Company</button>
+                </div>
+            </form>
+            <div id="result" class="card"></div>
+        </div>
     </div>
-
     <script>
       // Autofill job role from session
       document.addEventListener("DOMContentLoaded", function () {
@@ -107,7 +41,7 @@
             }
           });
       });
-
+    
       // Function to fetch jobs using Adzuna API
       function searchJobs() {
         const jobRole = document.getElementById("job-role").value.trim();
@@ -118,14 +52,14 @@
         const apiUrl = `https://api.adzuna.com/v1/api/jobs/in/search/1?app_id=aebca194&app_key=73665ad7b18bfd0e549dee805fb6f8ee&what=${encodeURIComponent(
           jobRole
         )}`;
-
+    
         document.getElementById("job-listings").innerHTML = "";
-
+    
         fetch(apiUrl)
           .then((response) => response.json())
           .then((data) => {
             const listingsDiv = document.getElementById("job-listings");
-
+    
             if (data.results && data.results.length > 0) {
               data.results.forEach((job) => {
                 const jobElement = document.createElement("div");
@@ -153,5 +87,7 @@
           .catch((error) => console.error("Error fetching data:", error));
       }
     </script>
-  </body>
+</body>
 </html>
+
+
